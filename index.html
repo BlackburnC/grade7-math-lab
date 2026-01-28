@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ohio Grade 7 Math Practice Lab</title>
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.08);
+      --panel2: rgba(255,255,255,.06);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --accent: #6aa6ff;
+      --accent2: #2ee59d;
+      --warn: #f5b942;
+      --danger: #ff5c7a;
+      --card: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.12);
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% -10%, rgba(106,166,255,.28), transparent 55%),
+        radial-gradient(1000px 700px at 95% 10%, rgba(46,229,157,.16), transparent 60%),
+        radial-gradient(900px 600px at 30% 110%, rgba(255,92,122,.12), transparent 60%),
+        linear-gradient(180deg, #070b14, #0b1220 40%, #0b1220);
+      min-height: 100vh;
+    }
+    a{ color: var(--accent); }
+    .app{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 14px 28px;
+    }
+
+    /* Top bar */
+    .topbar{
+      display:flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 14px;
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.06));
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 10px;
+      z-index: 5;
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex; gap: 12px; align-items:center;
+      min-width: 240px;
+    }
+    .logo{
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      background:
+        radial-gradient(18px 18px at 35% 30%, rgba(255,255,255,.35), transparent 60%),
+        linear-gradient(135deg, rgba(106,166,255,.85), rgba(46,229,157,.65));
+      box-shadow: 0 12px 30px rgba(106,166,255,.18);
+      border: 1px solid rgba(255,255,255,.14);
+      position: relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,.25), transparent);
+      transform: rotate(20deg);
+      animation: shine 7s linear infinite;
+    }
+    @keyframes shine{
+      0%{ transform: translateX(-45%) rotate(20deg); }
+      100%{ transform: translateX(45%) rotate(20deg); }
+    }
+    .brand h1{
+      margin:0;
+      font-size: 15px;
+      letter-spacing: .2px;
+      line-height: 1.1;
+    }
+    .brand .sub{
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .controls{
+      display:flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    /* Buttons, chips */
+    .btn{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      padding: 9px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+      font-size: 13px;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.18); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(106,166,255,.9), rgba(106,166,255,.55));
+      border-color: rgba(106,166,255,.45);
+      color: #0b1220;
+      font-weight: 700;
+    }
+    .btn.success{
+      background: linear-gradient(135deg, rgba(46,229,157,.95), rgba(46,229,157,.55));
+      border-color: rgba(46,229,157,.45);
+      color: #0b1220;
+      font-weight: 700;
+    }
+    .btn.warn{
+      background: linear-gradient(135deg, rgba(245,185,66,.95), rgba(245,185,66,.55));
+      border-color: rgba(245,185,66,.45);
+      color: #0b1220;
+      font-weight: 800;
+    }
+    .btn.ghost{
+      background: rgba(255,255,255,.04);
+    }
+    .chipRow{
+      display:flex; gap:8px; flex-wrap: wrap;
+      align-items:center;
+      padding: 8px 0 0;
+    }
+    .chip{
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      font-size: 12px;
+      cursor:pointer;
+      transition: background .12s ease, transform .12s ease, border-color .12s ease;
+      color: var(--muted);
+    }
+    .chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
+    .chip.active{
+      background: rgba(106,166,255,.18);
+      border-color: rgba(106,166,255,.35);
+      color: rgba(255,255,255,.92);
+    }
+
+    /* Layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+
+    .panel{
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panelHeader{
+      padding: 14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+    .panelHeader h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .2px;
+    }
+    .panelHeader .mini{
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .panelBody{ padding: 14px; }
+
+    /* Select controls */
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 640px){
+      .row{ grid-template-columns: 1fr; }
+    }
+    label{ font-size: 12px; color: var(--muted); display:block; margin-bottom: 6px; }
+    select, input[type="text"]{
+      width:100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(10,16,30,.55);
+      color: var(--text);
+      outline: none;
+    }
+    select:focus, input[type="text"]:focus{
+      border-color: rgba(106,166,255,.55);
+      box-shadow: 0 0 0 4px rgba(106,166,255,.12);
+    }
+
+    /* Tutor chat */
+    .chat{
+      height: 420px;
+      overflow:auto;
+      padding-right: 6px;
+    }
+    .msg{
+      display:flex;
+      gap: 10px;
+      margin: 10px 0;
+      align-items: flex-start;
+    }
+    .avatar{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+      font-weight: 800;
+      color: rgba(255,255,255,.82);
+    }
+    .bubble{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      max-width: 92%;
+      line-height: 1.35;
+      font-size: 13.5px;
+      color: rgba(255,255,255,.92);
+    }
+    .bubble small{
+      display:block;
+      margin-top: 6px;
+      color: var(--muted2);
+      font-size: 12px;
+    }
+    .msg.user{
+      flex-direction: row-reverse;
+    }
+    .msg.user .avatar{
+      background: rgba(106,166,255,.18);
+      border-color: rgba(106,166,255,.35);
+    }
+    .msg.user .bubble{
+      background: rgba(106,166,255,.12);
+      border-color: rgba(106,166,255,.22);
+    }
+    .tutorTools{
+      display:flex; gap:8px; flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .divider{
+      height: 1px;
+      background: rgba(255,255,255,.10);
+      margin: 12px 0;
+    }
+
+    /* Visual area */
+    .visualWrap{
+      border: 1px dashed rgba(255,255,255,.18);
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .visualTitle{
+      display:flex; align-items:center; justify-content: space-between;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.82);
+    }
+
+    /* Study Guide */
+    .guideCard{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .guideCard h3{
+      margin: 0 0 6px;
+      font-size: 13px;
+    }
+    .guideCard p, .guideCard li{
+      margin: 0;
+      color: rgba(255,255,255,.82);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .guideCard ul{ margin: 8px 0 0 18px; padding: 0; }
+    .tagRow{
+      display:flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+    }
+    .tag{
+      font-size: 11px;
+      color: rgba(255,255,255,.80);
+      background: rgba(46,229,157,.10);
+      border: 1px solid rgba(46,229,157,.18);
+      border-radius: 999px;
+      padding: 5px 8px;
+    }
+    .tag.alt{
+      background: rgba(106,166,255,.10);
+      border-color: rgba(106,166,255,.18);
+    }
+    .tag.warn{
+      background: rgba(245,185,66,.12);
+      border-color: rgba(245,185,66,.20);
+    }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(10,16,30,.72);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      max-width: 320px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 50;
+    }
+    .toast.show{ opacity: 1; transform: translateY(0); }
+    .toast b{ display:block; font-size: 13px; }
+    .toast span{ color: var(--muted); font-size: 12.5px; }
+
+    /* Confetti canvas */
+    #confetti{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    /* Modal */
+    .modalBackdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 14px;
+      z-index: 80;
+    }
+    .modalBackdrop.show{ display:flex; }
+    .modal{
+      width: min(920px, 100%);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(15,22,40,.94), rgba(10,16,30,.94));
+      box-shadow: 0 30px 90px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding: 14px 14px 12px;
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .modalBody{
+      padding: 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 860px){
+      .modalBody{ grid-template-columns: 1fr; }
+    }
+    .modalBody .guideCard{ margin: 0; }
+  </style>
+</head>
+
+<body>
+  <canvas id="confetti"></canvas>
+  <div class="toast" id="toast">
+    <b id="toastTitle">Nice work!</b>
+    <span id="toastMsg">Keep going—your brain is building pathways.</span>
+  </div>
+
+  <div class="modalBackdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Administrator Overview">
+      <div class="modalHead">
+        <div>
+          <div style="font-weight:900; font-size:14px;">Program Overview</div>
+          <div style="color: rgba(255,255,255,.65); font-size:12px; margin-top:2px;">Ohio Grade 7 Math • Safe Practice • Step-by-step tutoring</div>
+        </div>
+        <button class="btn ghost" onclick="closeAdmin()">Close</button>
+      </div>
+      <div class="modalBody">
+        <div class="guideCard">
+          <h3>What this is</h3>
+          <p>
+            A classroom practice lab aligned to Ohio Grade 7 standards (7.RP, 7.NS, 7.EE, 7.G, 7.SP).
+            Students choose their focus and difficulty, solve step-by-step, and get feedback based on common misconceptions.
+          </p>
+          <div class="tagRow">
+            <span class="tag alt">Standards-aligned</span>
+            <span class="tag">No accounts</span>
+            <span class="tag">No saving</span>
+            <span class="tag warn">Session-only adaptation</span>
+          </div>
+        </div>
+        <div class="guideCard">
+          <h3>Why it works</h3>
+          <ul>
+            <li><b>One-step-at-a-time</b> prevents answer copying and promotes reasoning.</li>
+            <li><b>Visual models</b> connect concrete → abstract (number line, tape diagram, balance model, geometry diagrams, simulations).</li>
+            <li><b>Misconception detection</b> delivers teacher-like feedback instead of “wrong”.</li>
+            <li><b>Psychological safety</b>: no grades, no tracking, no judgment.</li>
+          </ul>
+        </div>
+        <div class="guideCard">
+          <h3>Accessibility</h3>
+          <ul>
+            <li>Read-aloud for prompts and hints</li>
+            <li>Focus mode (reduces clutter)</li>
+            <li>Dark mode (already enabled by design)</li>
+          </ul>
+        </div>
+        <div class="guideCard">
+          <h3>Data & privacy</h3>
+          <p>
+            No student names, logins, or permanent storage. Session state exists only in the browser and resets when refreshed.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Ohio Grade 7 Math Practice Lab</h1>
+          <div class="sub">AI-style tutor • Visual models • Study guide • No grades or saving</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn ghost" onclick="openAdmin()">Administrator View</button>
+        <button class="btn ghost" onclick="toggleFocus()" id="focusBtn">Focus Mode</button>
+        <button class="btn ghost" onclick="readAloud()">Read Aloud</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Tutor -->
+      <div class="panel" id="tutorPanel">
+        <div class="panelHeader">
+          <div>
+            <h2>AI Tutor</h2>
+            <div class="mini" id="statusLine">Choose a domain and skill to begin.</div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn success" onclick="levelDown()">Level Down</button>
+            <button class="btn warn" onclick="toggleChallenge()" id="challengeBtn">Challenge: Off</button>
+            <button class="btn success" onclick="levelUp()">Level Up</button>
+          </div>
+        </div>
+
+        <div class="panelBody">
+          <div class="chipRow" id="domainChips"></div>
+
+          <div class="row" style="margin-top:10px;">
+            <div>
+              <label>Skill / Sub-standard</label>
+              <select id="skillSelect"></select>
+            </div>
+            <div>
+              <label>Difficulty</label>
+              <select id="difficultySelect">
+                <option value="1">Level 1 (gentle)</option>
+                <option value="2">Level 2 (grade-level)</option>
+                <option value="3">Level 3 (stretch)</option>
+                <option value="4">Level 4 (challenge)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="chat" id="chat"></div>
+
+          <div class="visualWrap" id="visualWrap">
+            <div class="visualTitle">
+              <div id="visualLabel">Visual model</div>
+              <div class="kbd">Drag / click</div>
+            </div>
+            <div id="visual"></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <label>Your next step (one step at a time)</label>
+          <input type="text" id="studentInput" placeholder="Example: subtract 7 from both sides" />
+          <div class="tutorTools">
+            <button class="btn primary" onclick="submitStep()">Submit Step</button>
+            <button class="btn ghost" onclick="giveHint()">Hint</button>
+            <button class="btn ghost" onclick="showExample()">Example</button>
+            <button class="btn ghost" onclick="newProblem()">New Problem</button>
+          </div>
+
+          <div class="divider"></div>
+          <div style="font-size:12px; color: var(--muted);">
+            Privacy note: Nothing is saved. Refreshing the page resets the session.
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Study Guide -->
+      <div class="panel" id="guidePanel">
+        <div class="panelHeader">
+          <div>
+            <h2>Student Study Guide</h2>
+            <div class="mini">Key ideas • steps • examples • common mistakes</div>
+          </div>
+          <div class="mini" id="standardTag"></div>
+        </div>
+        <div class="panelBody" id="guideBody">
+          <!-- injected -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /***********************
+     * STATE (session-only)
+     ***********************/
+    let state = {
+      domain: "EE",
+      skill: null,
+      difficulty: 2,
+      challenge: false,
+      stepIndex: 0,
+      current: null,
+      focus: false
+    };
+
+    /***********************
+     * DOMAIN + SUBSTANDARDS
+     ***********************/
+    const DOMAINS = [
+      { id:"RP", name:"7.RP", label:"Ratios & Proportional Relationships" },
+      { id:"NS", name:"7.NS", label:"The Number System" },
+      { id:"EE", name:"7.EE", label:"Expressions & Equations" },
+      { id:"G",  name:"7.G",  label:"Geometry" },
+      { id:"SP", name:"7.SP", label:"Statistics & Probability" },
+    ];
+
+    const SUBSTANDARDS = {
+      RP: [
+        { id:"RP1", title:"Unit Rates", code:"7.RP.A.1", guide:{
+          key:"A unit rate compares to 1 (per 1).",
+          steps:["Identify total and number of units.","Divide total by units.","Label your units (e.g., $ per item)."],
+          mistakes:["Multiplying instead of dividing.","Forgetting units."],
+          example:"If 5 items cost $20, unit rate = 20 ÷ 5 = $4 per item."
+        }},
+        { id:"RP2", title:"Proportions", code:"7.RP.A.2", guide:{
+          key:"Equivalent ratios form a proportion.",
+          steps:["Set up two equal ratios.","Cross multiply.","Solve and check reasonableness."],
+          mistakes:["Mixing up numerator/denominator.","Cross-multiplying incorrectly."],
+          example:"If 3/5 = x/10 then 5x = 30 → x = 6."
+        }},
+        { id:"RP3", title:"Percent Change", code:"7.RP.A.3", guide:{
+          key:"Percent change compares change to the original amount.",
+          steps:["Find the percent of the original.","Add (increase) or subtract (decrease).","Check if result makes sense."],
+          mistakes:["Using the new value as the base.","Turning percent into the wrong decimal."],
+          example:"Increase 50 by 20% → 20% of 50 is 10 → 60."
+        }},
+      ],
+      NS: [
+        { id:"NS1", title:"Add & Subtract Integers", code:"7.NS.A.1", guide:{
+          key:"Integers move on a number line. Adding moves; subtracting is adding the opposite.",
+          steps:["Rewrite subtraction as adding the opposite (if needed).","Same sign → add and keep sign.","Different signs → subtract distances, keep sign of the larger absolute value."],
+          mistakes:["Adding signs instead of values.","Forgetting subtracting a negative becomes adding."],
+          example:"-3 + 7 = 4 because 7 has the larger absolute value and signs are different."
+        }},
+        { id:"NS2", title:"Multiply & Divide Rational Numbers", code:"7.NS.A.2", guide:{
+          key:"Sign rules + fraction rules.",
+          steps:["Multiply/divide absolute values.","Apply sign rules (same sign positive; different sign negative).","Simplify."],
+          mistakes:["Sign errors.","Dividing by flipping the wrong fraction."],
+          example:"(-2)×(5)= -10.   (3/4) ÷ (1/2)= (3/4)×(2/1)= 3/2."
+        }},
+        { id:"NS3", title:"Real-world Rational Problems", code:"7.NS.A.3", guide:{
+          key:"Interpret the operation in context (profit/loss, temperature, elevation).",
+          steps:["Identify what positives/negatives mean in the story.","Choose the operation.","Compute and interpret your answer."],
+          mistakes:["Getting a correct number but wrong meaning.","Ignoring signs."],
+          example:"Temp -2 then drops 5 more → -2 + (-5)= -7."
+        }},
+      ],
+      EE: [
+        { id:"EE1", title:"Simplify Expressions", code:"7.EE.A.1", guide:{
+          key:"Combine like terms and use the distributive property.",
+          steps:["Distribute if needed.","Combine like terms (same variable & power).","Rewrite neatly."],
+          mistakes:["Combining unlike terms.","Distributing to only one term."],
+          example:"3(x+4)=3x+12.  2x+5x=7x."
+        }},
+        { id:"EE2", title:"One-Step Equations", code:"7.EE.B.3", guide:{
+          key:"Undo the operation to isolate the variable.",
+          steps:["Identify the operation on x.","Use the inverse operation on both sides.","Check by substitution."],
+          mistakes:["Doing the wrong inverse.","Only applying to one side."],
+          example:"x/5=6 → multiply both sides by 5 → x=30."
+        }},
+        { id:"EE3", title:"Two-Step Equations", code:"7.EE.B.3", guide:{
+          key:"Undo addition/subtraction first, then multiplication/division.",
+          steps:["Undo the constant term (+/-).","Undo the coefficient (× or ÷).","Check."],
+          mistakes:["Dividing before removing constant.","Changing signs incorrectly."],
+          example:"3x+7=25 → subtract 7 → 3x=18 → divide by 3 → x=6."
+        }},
+        { id:"EE4", title:"Inequalities", code:"7.EE.B.4", guide:{
+          key:"Solve like an equation. (Flip sign only when multiplying/dividing by a negative.)",
+          steps:["Undo constant term.","Undo coefficient.","If you multiply/divide by a negative, flip the inequality."],
+          mistakes:["Flipping sign when not needed.","Not flipping sign when needed."],
+          example:"-2x+5>13 → subtract 5 → -2x>8 → divide by -2 → x< -4."
+        }},
+        { id:"EE5", title:"Word Problems with Equations", code:"7.EE.B.4", guide:{
+          key:"Define a variable, write an equation, then solve step-by-step.",
+          steps:["Let x represent the unknown.","Translate words → math.","Solve and interpret."],
+          mistakes:["Choosing the wrong variable.","Forgetting the fixed fee / starting amount."],
+          example:"Fee 8 plus 2 per ticket totals 26 → 8+2x=26 → x=9 tickets."
+        }},
+      ],
+      G: [
+        { id:"G1", title:"Area (Triangles & Quadrilaterals)", code:"7.G.B.6", guide:{
+          key:"Area is space inside a shape. Use the correct formula.",
+          steps:["Identify shape.","Use formula (triangle = ½bh).","Compute with units squared."],
+          mistakes:["Forgetting ½ for triangles.","Dropping square units."],
+          example:"b=10, h=6 triangle area = ½(10)(6)=30 square units."
+        }},
+        { id:"G2", title:"Circles (Area & Circumference)", code:"7.G.B.4", guide:{
+          key:"Circumference is around; area is inside.",
+          steps:["Use C=2πr or C=πd.","Use A=πr².","Round as instructed."],
+          mistakes:["Using diameter where radius is needed.","Squaring the wrong value."],
+          example:"r=4 → A=16π and C=8π."
+        }},
+        { id:"G3", title:"Volume (Prisms)", code:"7.G.B.6", guide:{
+          key:"Volume is 3D space: V = (area of base)×height.",
+          steps:["Find base area.","Multiply by height.","Use cubic units."],
+          mistakes:["Using perimeter instead of area.","Forgetting cubic units."],
+          example:"Rectangular prism 4×3 base, height 5 → V=12×5=60."
+        }},
+        { id:"G4", title:"Surface Area", code:"7.G.B.6", guide:{
+          key:"Surface area is the total area of all faces.",
+          steps:["Identify faces.","Find each face area.","Add them up."],
+          mistakes:["Missing a face.","Doubling the wrong faces."],
+          example:"Cube side 3: SA=6×9=54."
+        }},
+      ],
+      SP: [
+        { id:"SP1", title:"Mean & MAD", code:"7.SP.B.4", guide:{
+          key:"Mean is average; MAD measures typical distance from the mean.",
+          steps:["Find the mean.","Find each distance from the mean.","Average the distances for MAD."],
+          mistakes:["Forgetting absolute value for distance.","Averaging before finding all distances."],
+          example:"Data 2,4,6 mean=4 distances 2,0,2 MAD=4/3≈1.33."
+        }},
+        { id:"SP2", title:"Probability Models", code:"7.SP.C.5", guide:{
+          key:"Probability = favorable outcomes ÷ total outcomes.",
+          steps:["List outcomes.","Count favorable.","Make a fraction (simplify if possible)."],
+          mistakes:["Counting outcomes incorrectly.","Using addition when outcomes aren’t overlapping."],
+          example:"3 red, 2 blue: P(red)=3/5."
+        }},
+        { id:"SP3", title:"Compare Data Sets", code:"7.SP.B.3", guide:{
+          key:"Compare centers (mean/median) and variability (range/IQR/MAD).",
+          steps:["Find center for each set.","Find spread for each set.","Compare and interpret."],
+          mistakes:["Comparing only means with very different spreads.","Mixing median and mean."],
+          example:"Set A mean 10 MAD 1 vs Set B mean 10 MAD 4 → B varies more."
+        }},
+        { id:"SP4", title:"Sampling & Bias", code:"7.SP.A.1–2", guide:{
+          key:"Random samples reduce bias and represent the population better.",
+          steps:["Define population.","Choose random sample method.","Look for bias risks."],
+          mistakes:["Surveying only friends.","Ignoring non-response bias."],
+          example:"To survey school lunch, sample randomly across grade levels."
+        }},
+      ]
+    };
+
+    /***********************
+     * GENERATORS + MODELS
+     ***********************/
+    function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+    function makeProblem(){
+      const d = state.domain;
+      const s = getSelectedSkill();
+      const lvl = state.difficulty;
+
+      // Core structure: prompt, steps[], validators with misconception detection, visual model type.
+      if(d==="NS" && s.id==="NS1"){
+        // Integers add/sub
+        let a = randInt(-12,12);
+        let b = randInt(-12,12);
+        if(lvl>=3){ a = randInt(-20,20); b = randInt(-20,20); }
+        const sum = a + b;
+        return {
+          domain:d, skill:s, level:lvl,
+          title:`Compute: ${a} + (${b})`,
+          model:{ type:"numberLine", a, b, target: sum },
+          steps:[
+            {
+              prompt:`Step 1: Are the signs the same or different? (type "same" or "different")`,
+              validate:(input)=>{
+                const same = (a>=0 && b>=0) || (a<0 && b<0);
+                if(input.includes("same") && same) return ok(`Yes—same signs. Next: add absolute values and keep the sign.`);
+                if(input.includes("different") && !same) return ok(`Yes—different signs. Next: subtract absolute values and keep the sign of the larger absolute value.`);
+                if(input.includes("same") && !same) return miss(`Not quite—these are different signs. What does that mean on a number line?`);
+                if(input.includes("different") && same) return miss(`Not quite—these are the same sign. What happens to the sign when you add?`);
+                return miss(`Try "same" or "different".`);
+              }
+            },
+            {
+              prompt:`Step 2: What is the result? (type the number)`,
+              validate:(input)=>{
+                const n = toNumber(input);
+                if(n===sum) return ok(`✅ Nice! ${a} + (${b}) = ${sum}.`);
+                // misconceptions
+                if(n===Math.abs(a)+Math.abs(b)) return miss(`You added absolute values but ignored the sign. What sign should the result have?`);
+                if(n===Math.abs(a)-Math.abs(b) || n===Math.abs(b)-Math.abs(a)) return miss(`You subtracted absolute values, but check which absolute value is larger and which sign wins.`);
+                return miss(`Close—try using the number line: start at ${a} and move ${b} steps.`);
+              }
+            }
+          ]
+        };
+      }
+
+      if(d==="NS" && s.id==="NS2"){
+        // Multiply/divide rationals (integers for simplicity)
+        let a = randInt(-9,9); if(a===0) a= -3;
+        let b = randInt(-9,9); if(b===0) b= 4;
+        if(lvl>=3){ a = randInt(-12,12); b = randInt(-12,12); if(a===0) a=5; if(b===0) b=-6; }
+        const op = (Math.random()<0.5) ? "×" : "÷";
+        let ans;
+        let prompt;
+        if(op==="×"){
+          ans = a*b;
+          prompt = `Compute: ${a} × ${b}`;
+        } else {
+          // make divisible
+          ans = a;
+          const dividend = a*b;
+          prompt = `Compute: ${dividend} ÷ ${b}`;
+          a = dividend; // reuse variable name loosely for messaging
+        }
+        return {
+          domain:d, skill:s, level:lvl,
+          title: prompt,
+          model:{ type:"signRules" },
+          steps:[
+            {
+              prompt:`Step 1: Will the answer be positive or negative? (type "positive" or "negative")`,
+              validate:(input)=>{
+                const signNegative = (op==="×")
+                  ? ((a<0) !== (b<0))
+                  : (( (a<0) !== (b<0) ));
+                const wantNeg = signNegative;
+                if(input.includes("negative") && wantNeg) return ok(`Yes—different signs give a negative result.`);
+                if(input.includes("positive") && !wantNeg) return ok(`Yes—same signs give a positive result.`);
+                if(input.includes("positive") && wantNeg) return miss(`Check the signs: different signs → negative.`);
+                if(input.includes("negative") && !wantNeg) return miss(`Check the signs: same signs → positive.`);
+                return miss(`Type "positive" or "negative".`);
+              }
+            },
+            {
+              prompt:`Step 2: What is the value? (type the number)`,
+              validate:(input)=>{
+                const n = toNumber(input);
+                if(n===ans) return ok(`✅ Correct: ${prompt} = ${ans}`);
+                if(n===Math.abs(ans)) return miss(`You got the magnitude right—now apply the sign rule.`);
+                return miss(`Try multiplying/dividing absolute values first, then apply the sign.`);
+              }
+            }
+          ]
+        };
+      }
+
+      if(d==="RP" && s.id==="RP1"){
+        // unit rates
+        const units = (lvl<=2) ? randInt(2,6) : randInt(3,10);
+        const per = (lvl<=2) ? randInt(2,7) : randInt(3,12);
+        const total = units*per;
+        return {
+          domain:d, skill:s, level:lvl,
+          title:`${units} items cost $${total}. What is the unit rate?`,
+          model:{ type:"tape", units, total },
+          steps:[
+            {
+              prompt:`Step 1: What operation finds a unit rate? (type "divide" or "multiply")`,
+              validate:(input)=>{
+                if(input.includes("divide")) return ok(`Yes—divide total by number of items to get “per 1.”`);
+                if(input.includes("multiply")) return miss(`Unit rate means “per 1.” Multiplying makes it bigger—try dividing.`);
+                return miss(`Type "divide" or "multiply".`);
+              }
+            },
+            {
+              prompt:`Step 2: What is the unit rate? (number only)`,
+              validate:(input)=>{
+                const n = toNumber(input);
+                if(n===per) return ok(`✅ Nice! $${total} ÷ ${units} = $${per} per item.`);
+                if(n===total) return miss(`That’s the total cost. Unit rate is per 1 item, so divide by ${units}.`);
+                return miss(`Try: ${total} ÷ ${units}.`);
+              }
+            }
+          ]
+        };
+      }
+
+      if(d==="EE" && s.id==="EE3"){
+        // two-step equations
+        const a = (lvl<=2) ? randInt(2,6) : randInt(2,10);
+        const b = (lvl<=2) ? randInt(2,12) : randInt(-15,15);
+        const x = (lvl<=2) ? randInt(2,9) : randInt(-10,10);
+        const c = a*x + b;
+        return {
+          domain:d, skill:s, level:lvl,
+          title:`Solve: ${a}x ${b>=0?"+":"-"} ${Math.abs(b)} = ${c}`,
+          model:{ type:"balance", a, b, c },
+          steps:[
+            {
+              prompt:`Step 1: What should we undo first— the constant (${b>=0?"+":"-"}${Math.abs(b)}) or the coefficient (${a})? (type "constant" or "coefficient")`,
+              validate:(input)=>{
+                if(input.includes("constant")) return ok(`Yes—undo the constant first so the x-term is alone.`);
+                if(input.includes("coefficient")) return miss(`Not yet—dividing first won’t remove the constant. Try undoing the constant first.`);
+                return miss(`Type "constant" or "coefficient".`);
+              }
+            },
+            {
+              prompt:`Step 2: What do you do to both sides? (e.g., "subtract 7" or "add 5")`,
+              validate:(input)=>{
+                const want = (b>=0) ? "subtract" : "add";
+                if(input.includes(want)) return ok(`Good—doing that on both sides removes the constant.`);
+                if((b>=0 && input.includes("add")) || (b<0 && input.includes("subtract")))
+                  return miss(`Careful—think inverse operation. If it’s +${Math.abs(b)}, we subtract. If it’s -${Math.abs(b)}, we add.`);
+                if(input.includes("divide")) return miss(`Hold on—constant first. What inverse removes the constant term?`);
+                return miss(`Try: ${b>=0 ? "subtract" : "add"} ${Math.abs(b)} from both sides.`);
+              }
+            },
+            {
+              prompt:`Step 3: After that, what is the new equation? (format like "3x = 18")`,
+              validate:(input)=>{
+                const left = `${a}x`;
+                const right = c - b;
+                // rough parse: look for "x" and right number
+                if(input.replace(/\s/g,'').includes(`${a}x=${right}`)) return ok(`Yes! Now it's ${a}x = ${right}.`);
+                if(input.includes("x") && input.includes("=") && input.includes(String(right)))
+                  return ok(`Looks right. Now divide by ${a}.`);
+                return miss(`You want ${a}x = ${right}.`);
+              }
+            },
+            {
+              prompt:`Step 4: What is x? (number only)`,
+              validate:(input)=>{
+                const n = toNumber(input);
+                if(n===x) return ok(`✅ Correct: x = ${x}.`);
+                if(n=== (c/b)) return miss(`That would only work if the equation were bx=c. Here we had two steps.`);
+                if(n=== (c - b)) return miss(`That’s the value after removing the constant. Now divide by ${a}.`);
+                return miss(`Try dividing ${c-b} by ${a}.`);
+              }
+            }
+          ]
+        };
+      }
+
+      // Fallback: simple skill builder with decent feedback
+      return makeGenericProblem(d, s, lvl);
+    }
+
+    function makeGenericProblem(d, s, lvl){
+      // Use simple question types for the rest, still step-by-step.
+      if(d==="EE" && s.id==="EE2"){
+        const a = (lvl<=2)? randInt(2,10) : randInt(2,20);
+        const x = (lvl<=2)? randInt(2,12) : randInt(-12,12);
+        const b = a*x;
+        return {
+          domain:d, skill:s, level:lvl,
+          title:`Solve: x ÷ ${a} = ${x}`,
+          model:{ type:"equationTiles" },
+          steps:[
+            { prompt:`Step 1: What inverse operation undoes ÷ ${a}? (type "multiply")`,
+              validate:(input)=> input.includes("multiply") ? ok(`Yes—multiply both sides by ${a}.`) : miss(`Division is undone by multiplication.`)
+            },
+            { prompt:`Step 2: What is x?`,
+              validate:(input)=> toNumber(input)===b ? ok(`✅ Correct: x = ${b}`) : miss(`Multiply ${x}×${a}.`)
+            }
+          ]
+        };
+      }
+      if(d==="G" && s.id==="G1"){
+        const base = (lvl<=2)? randInt(4,12) : randInt(6,20);
+        const height = (lvl<=2)? randInt(3,10) : randInt(4,18);
+        const area = 0.5*base*height;
+        return {
+          domain:d, skill:s, level:lvl,
+          title:`Triangle area: base ${base}, height ${height}. Find area.`,
+          model:{ type:"triangleDrag", base, height },
+          steps:[
+            { prompt:`Step 1: What formula? (type "1/2bh" or "0.5bh")`,
+              validate:(input)=> (input.includes("1/2")||input.includes("0.5")) ? ok(`Yes—A = ½bh.`) : miss(`Triangle area is half of a rectangle: A=½bh.`)
+            },
+            { prompt:`Step 2: What is the area?`,
+              validate:(input)=>{
+                const n = toNumber(input);
+                if(n===area) return ok(`✅ Correct: A = ${area} square units.`);
+                if(n===base*height) return miss(`You found rectangle area. Triangle is half: divide by 2.`);
+                return miss(`Compute 0.5 × ${base} × ${height}.`);
+              }
+            }
+          ]
+        };
+      }
+      if(d==="SP" && s.id==="SP2"){
+        const red = (lvl<=2)? randInt(2,6) : randInt(3,10);
+        const blue = (lvl<=2)? randInt(1,6) : randInt(2,10);
+        const total = red+blue;
+        return {
+          domain:d, skill:s, level:lvl,
+          title:`A bag has ${red} red and ${blue} blue. What is P(red)?`,
+          model:{ type:"probBox", red, blue },
+          steps:[
+            { prompt:`Step 1: Probability is favorable ÷ total. What is the total?`,
+              validate:(input)=> toNumber(input)===total ? ok(`Yes—total outcomes = ${total}.`) : miss(`Add: ${red}+${blue}.`)
+            },
+            { prompt:`Step 2: What is P(red)? (fraction like 3/5)`,
+              validate:(input)=>{
+                const frac = parseFraction(input);
+                if(frac && frac.num===red && frac.den===total) return ok(`✅ Correct: P(red) = ${red}/${total}.`);
+                if(frac && frac.num===total && frac.den===red) return miss(`You flipped it. Favorable goes on top, total on bottom.`);
+                return miss(`Use ${red}/${total}.`);
+              }
+            }
+          ]
+        };
+      }
+      // simple generic
+      return {
+        domain:d, skill:s, level:lvl,
+        title:`Practice: ${s.title} (auto-generated)`,
+        model:{ type:"none" },
+        steps:[
+          { prompt:`Type: "ready" to begin.`,
+            validate:(input)=> input.includes("ready") ? ok(`Great—press "New Problem" for a fresh one, or choose another skill.`) : miss(`Type "ready".`)
+          }
+        ]
+      };
+    }
+
+    /***********************
+     * VISUAL MODELS (polished + interactive)
+     ***********************/
+    function renderVisual(p){
+      const v = document.getElementById("visual");
+      const wrap = document.getElementById("visualWrap");
+      const label = document.getElementById("visualLabel");
+
+      v.innerHTML = "";
+      wrap.style.display = "block";
+
+      const m = p.model || {type:"none"};
+      label.textContent = visualName(m.type);
+
+      if(m.type==="numberLine") return renderNumberLine(v, m);
+      if(m.type==="tape") return renderTape(v, m);
+      if(m.type==="balance") return renderBalance(v, m);
+      if(m.type==="triangleDrag") return renderTriangle(v, m);
+      if(m.type==="probBox") return renderProbBox(v, m);
+      if(m.type==="signRules") return renderSignRules(v);
+      if(m.type==="equationTiles") return renderEqTiles(v);
+      v.innerHTML = `<div style="color:rgba(255,255,255,.7); font-size:13px;">No visual model for this one yet.</div>`;
+    }
+
+    function visualName(t){
+      return ({
+        numberLine:"Number line model",
+        tape:"Tape diagram",
+        balance:"Balance model",
+        triangleDrag:"Geometry model",
+        probBox:"Probability model",
+        signRules:"Sign rules model",
+        equationTiles:"Equation tiles",
+        none:"Visual model"
+      })[t] || "Visual model";
+    }
+
+    function renderNumberLine(root, m){
+      // Interactive: drag dot; snap to integers; show target ghost.
+      const width = 720, height = 110;
+      const min = -20, max = 20;
+      const start = m.a;
+      const target = m.target;
+
+      const scaleX = (n)=> 20 + ( (n-min) / (max-min) ) * (width-40);
+      const snap = (x)=> {
+        const t = (x-20)/(width-40);
+        const n = min + t*(max-min);
+        return Math.round(n);
+      };
+
+      root.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="color:rgba(255,255,255,.75); font-size:12px;">
+            Start at <span class="kbd">${start}</span> and move <span class="kbd">${m.b}</span>.
+            Drag the dot.
+          </div>
+          <div style="color:rgba(255,255,255,.65); font-size:12px;">Snap-to-integers enabled</div>
+        </div>
+        <svg viewBox="0 0 ${width} ${height}" width="100%" height="${height}">
+          <defs>
+            <linearGradient id="nl" x1="0" x2="1">
+              <stop offset="0" stop-color="rgba(106,166,255,.85)"/>
+              <stop offset="1" stop-color="rgba(46,229,157,.65)"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <line x1="20" y1="60" x2="${width-20}" y2="60" stroke="rgba(255,255,255,.35)" stroke-width="4" stroke-linecap="round"/>
+          ${tickMarks(min,max,scaleX)}
+          <circle cx="${scaleX(target)}" cy="60" r="12" fill="rgba(46,229,157,.18)" stroke="rgba(46,229,157,.45)" stroke-width="2"/>
+          <text x="${scaleX(target)}" y="92" text-anchor="middle" fill="rgba(46,229,157,.8)" font-size="12">target</text>
+
+          <circle id="dot" cx="${scaleX(start)}" cy="60" r="14" fill="url(#nl)" filter="url(#glow)" style="cursor:grab;"/>
+          <text id="dotLabel" x="${scaleX(start)}" y="34" text-anchor="middle" fill="rgba(255,255,255,.85)" font-size="12">position: ${start}</text>
+        </svg>
+      `;
+
+      const svg = root.querySelector("svg");
+      const dot = root.querySelector("#dot");
+      const dotLabel = root.querySelector("#dotLabel");
+      let dragging = false;
+
+      const setDot = (n)=>{
+        const x = scaleX(n);
+        dot.setAttribute("cx", x);
+        dotLabel.setAttribute("x", x);
+        dotLabel.textContent = `position: ${n}`;
+      };
+
+      dot.addEventListener("pointerdown", (e)=>{ dragging=true; dot.style.cursor="grabbing"; dot.setPointerCapture(e.pointerId); });
+      dot.addEventListener("pointerup", ()=>{ dragging=false; dot.style.cursor="grab"; });
+      dot.addEventListener("pointermove", (e)=>{
+        if(!dragging) return;
+        const rect = svg.getBoundingClientRect();
+        const x = clamp(e.clientX - rect.left, 20, width-20);
+        const n = clamp(snap(x), min, max);
+        setDot(n);
+      });
+
+      // helpful: clicking target sets dot
+      svg.addEventListener("dblclick", ()=> setDot(target));
+    }
+
+    function tickMarks(min,max,scaleX){
+      const ticks = [];
+      for(let n=min; n<=max; n++){
+        if(n%5===0){
+          ticks.push(`<line x1="${scaleX(n)}" y1="52" x2="${scaleX(n)}" y2="68" stroke="rgba(255,255,255,.28)" stroke-width="2"/>`);
+          ticks.push(`<text x="${scaleX(n)}" y="100" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="11">${n}</text>`);
+        } else if(n%1===0){
+          ticks.push(`<line x1="${scaleX(n)}" y1="56" x2="${scaleX(n)}" y2="64" stroke="rgba(255,255,255,.18)" stroke-width="1"/>`);
+        }
+      }
+      return ticks.join("");
+    }
+
+    function renderTape(root, m){
+      const units = m.units;
+      const total = m.total;
+      const per = total/units;
+
+      root.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="color:rgba(255,255,255,.75); font-size:12px;">Click boxes to “count” units. Goal: find cost <b>per 1</b>.</div>
+          <div style="color:rgba(255,255,255,.65); font-size:12px;">Total: <span class="kbd">$${total}</span></div>
+        </div>
+        <div id="tape" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+        <div style="margin-top:10px; color:rgba(255,255,255,.70); font-size:12px;">
+          Hint: unit rate = total ÷ units = <span class="kbd">$${total}</span> ÷ <span class="kbd">${units}</span>
+        </div>
+      `;
+
+      const tape = root.querySelector("#tape");
+      let selected = 0;
+
+      for(let i=0;i<units;i++){
+        const box = document.createElement("button");
+        box.className="btn";
+        box.style.minWidth="92px";
+        box.style.background="rgba(106,166,255,.12)";
+        box.style.borderColor="rgba(106,166,255,.25)";
+        box.innerHTML = `1 unit<br><small style="color:rgba(255,255,255,.7)">${selected? "✓": ""}</small>`;
+        box.onclick=()=>{
+          box.style.background="rgba(46,229,157,.14)";
+          box.style.borderColor="rgba(46,229,157,.30)";
+          box.innerHTML = `1 unit<br><small style="color:rgba(255,255,255,.7)">✓</small>`;
+          selected++;
+          toast("Nice!", `You counted ${selected}/${units} units. Now think: $${total} ÷ ${units}.`);
+        };
+        tape.appendChild(box);
+      }
+
+      // add a "reveal per" helper (not giving answer automatically)
+      const helper = document.createElement("div");
+      helper.style.marginTop="10px";
+      helper.innerHTML = `
+        <button class="btn ghost" id="showPer">Show “per 1” setup</button>
+        <span style="color:rgba(255,255,255,.65); font-size:12px; margin-left:8px;" id="perLine"></span>
+      `;
+      tape.appendChild(helper);
+      helper.querySelector("#showPer").onclick=()=>{
+        helper.querySelector("#perLine").textContent = `Per 1 = ${total} ÷ ${units} = ${per}`;
+      };
+    }
+
+    function renderBalance(root, m){
+      // Click-to-remove constant from both sides (visual only; tutor still asks steps)
+      const width=760, height=150;
+      const b = m.b;
+
+      root.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="color:rgba(255,255,255,.75); font-size:12px;">Click the constant tile to “remove” it from both sides.</div>
+          <div style="color:rgba(255,255,255,.65); font-size:12px;">Keep it balanced</div>
+        </div>
+        <svg viewBox="0 0 ${width} ${height}" width="100%" height="${height}">
+          <defs>
+            <filter id="shadow"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,.35)"/></filter>
+          </defs>
+          <line x1="380" y1="18" x2="380" y2="132" stroke="rgba(255,255,255,.35)" stroke-width="6" stroke-linecap="round"/>
+          <line x1="160" y1="76" x2="600" y2="76" stroke="rgba(255,255,255,.35)" stroke-width="6" stroke-linecap="round"/>
+          <rect x="150" y="92" width="200" height="32" rx="10" fill="rgba(106,166,255,.14)" stroke="rgba(106,166,255,.35)"/>
+          <text x="250" y="114" text-anchor="middle" fill="rgba(255,255,255,.85)" font-size="12">${m.a}x</text>
+
+          <rect id="constL" x="360" y="92" width="90" height="32" rx="10" fill="rgba(245,185,66,.16)" stroke="rgba(245,185,66,.35)" filter="url(#shadow)" style="cursor:pointer"/>
+          <text id="constLText" x="405" y="114" text-anchor="middle" fill="rgba(255,255,255,.85)" font-size="12">${b>=0?"+":"-"}${Math.abs(b)}</text>
+
+          <rect x="460" y="92" width="160" height="32" rx="10" fill="rgba(46,229,157,.14)" stroke="rgba(46,229,157,.35)"/>
+          <text x="540" y="114" text-anchor="middle" fill="rgba(255,255,255,.85)" font-size="12">${m.c}</text>
+
+          <text x="380" y="146" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="11">Balance model (remove the same thing from both sides)</text>
+        </svg>
+      `;
+
+      const tile = root.querySelector("#constL");
+      const txt = root.querySelector("#constLText");
+      tile.onclick=()=>{
+        tile.style.opacity = ".25";
+        txt.style.opacity = ".25";
+        toast("Balance idea!", `Removing ${b>=0?Math.abs(b):`-${Math.abs(b)}`} from both sides keeps equality true.`);
+      };
+    }
+
+    function renderTriangle(root, m){
+      // Drag height handle to see area update (visual exploration)
+      const base = m.base, startH = m.height;
+      const width=740, height=210;
+
+      root.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="color:rgba(255,255,255,.75); font-size:12px;">Drag the height handle. Area updates live.</div>
+          <div style="color:rgba(255,255,255,.65); font-size:12px;">A = ½ × b × h</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap;">
+          <svg id="tri" viewBox="0 0 ${width} ${height}" width="100%" height="${height}" style="max-width:760px;">
+            <defs>
+              <linearGradient id="tg" x1="0" x2="1">
+                <stop offset="0" stop-color="rgba(46,229,157,.50)"/>
+                <stop offset="1" stop-color="rgba(106,166,255,.35)"/>
+              </linearGradient>
+            </defs>
+            <polygon id="poly" points="120,170 620,170 370,60" fill="url(#tg)" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
+            <line x1="120" y1="170" x2="620" y2="170" stroke="rgba(255,255,255,.25)" stroke-width="4" stroke-linecap="round"/>
+            <text x="370" y="195" text-anchor="middle" fill="rgba(255,255,255,.65)" font-size="12">base</text>
+
+            <line id="hLine" x1="370" y1="170" x2="370" y2="60" stroke="rgba(245,185,66,.85)" stroke-width="5" stroke-linecap="round"/>
+            <circle id="hHandle" cx="370" cy="60" r="10" fill="rgba(245,185,66,.85)" style="cursor:grab;"/>
+          </svg>
+          <div style="min-width:220px;">
+            <div class="guideCard" style="margin:0;">
+              <h3>Live values</h3>
+              <p id="triVals" style="margin-top:6px;"></p>
+              <div class="tagRow">
+                <span class="tag alt">Explore</span>
+                <span class="tag warn">No saving</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const svg = root.querySelector("#tri");
+      const handle = root.querySelector("#hHandle");
+      const hLine = root.querySelector("#hLine");
+      const vals = root.querySelector("#triVals");
+
+      let h = startH;
+      const basePix = 500;
+      const heightMax = 120;
+
+      function update(){
+        const py = clamp(170 - (h/20)*heightMax, 40, 170);
+        handle.setAttribute("cy", py);
+        hLine.setAttribute("y2", py);
+        const area = 0.5 * base * h;
+        vals.innerHTML = `base = <span class="kbd">${base}</span><br>height ≈ <span class="kbd">${h.toFixed(1)}</span><br>area ≈ <span class="kbd">${area.toFixed(1)}</span>`;
+      }
+      update();
+
+      let dragging=false;
+      handle.addEventListener("pointerdown",(e)=>{ dragging=true; handle.style.cursor="grabbing"; handle.setPointerCapture(e.pointerId); });
+      handle.addEventListener("pointerup",()=>{ dragging=false; handle.style.cursor="grab"; });
+      handle.addEventListener("pointermove",(e)=>{
+        if(!dragging) return;
+        const rect = svg.getBoundingClientRect();
+        const y = clamp(e.clientY - rect.top, 40, 170);
+        // map y to h
+        const t = (170 - y) / (170-40);
+        h = 1 + t*20; // 1..21 approx
+        update();
+      });
+    }
+
+    function renderProbBox(root, m){
+      let trials=0, redHits=0;
+      const red=m.red, blue=m.blue;
+
+      root.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="color:rgba(255,255,255,.75); font-size:12px;">Click to simulate draws (with replacement). Watch experimental probability.</div>
+          <div style="color:rgba(255,255,255,.65); font-size:12px;">Model: ${red} red, ${blue} blue</div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <button class="btn primary" id="draw1">Draw once</button>
+          <button class="btn ghost" id="draw10">Draw 10</button>
+          <button class="btn ghost" id="reset">Reset</button>
+          <div style="color:rgba(255,255,255,.75); font-size:12px;" id="probReadout"></div>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
+          <div style="flex:1; height:14px; background:rgba(255,255,255,.10); border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.12);">
+            <div id="bar" style="height:100%; width:0%; background:linear-gradient(90deg, rgba(46,229,157,.85), rgba(106,166,255,.55));"></div>
+          </div>
+          <div style="color:rgba(255,255,255,.55); font-size:12px;">P(red)</div>
+        </div>
+      `;
+
+      const readout = root.querySelector("#probReadout");
+      const bar = root.querySelector("#bar");
+
+      function draw(n=1){
+        for(let i=0;i<n;i++){
+          const total = red+blue;
+          const pick = Math.random()*total;
+          trials++;
+          if(pick < red) redHits++;
+        }
+        const p = trials ? (redHits/trials) : 0;
+        readout.innerHTML = `Trials: <span class="kbd">${trials}</span> • Reds: <span class="kbd">${redHits}</span> • Experimental P(red): <span class="kbd">${p.toFixed(2)}</span>`;
+        bar.style.width = `${(p*100).toFixed(1)}%`;
+      }
+
+      root.querySelector("#draw1").onclick=()=> draw(1);
+      root.querySelector("#draw10").onclick=()=> draw(10);
+      root.querySelector("#reset").onclick=()=>{
+        trials=0; redHits=0; draw(0);
+      };
+      draw(0);
+    }
+
+    function renderSignRules(root){
+      root.innerHTML = `
+        <div class="guideCard" style="margin:0;">
+          <h3>Sign rules quick model</h3>
+          <ul>
+            <li>Same signs → <b>positive</b></li>
+            <li>Different signs → <b>negative</b></li>
+          </ul>
+          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+            <span class="tag alt">× and ÷</span>
+            <span class="tag">Always apply signs last</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEqTiles(root){
+      root.innerHTML = `
+        <div class="guideCard" style="margin:0;">
+          <h3>Equation tiles idea</h3>
+          <p>Think: isolate x by doing the same operation to both sides. Visualize “undoing” the operation on x.</p>
+          <div class="tagRow">
+            <span class="tag alt">Inverse operations</span>
+            <span class="tag">Both sides</span>
+          </div>
+        </div>
+      `;
+    }
+
+    /***********************
+     * TUTOR CHAT + MISCONCEPTIONS
+     ***********************/
+    function addMsg(role, text, meta){
+      const chat = document.getElementById("chat");
+      const msg = document.createElement("div");
+      msg.className = `msg ${role}`;
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = role==="user" ? "U" : "T";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerHTML = escapeHTML(text).replace(/\n/g,"<br/>");
+      if(meta){
+        const small = document.createElement("small");
+        small.textContent = meta;
+        bubble.appendChild(small);
+      }
+      msg.appendChild(avatar);
+      msg.appendChild(bubble);
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function ok(text){ return { ok:true, text }; }
+    function miss(text){ return { ok:false, text }; }
+
+    function toNumber(s){
+      const n = Number(String(s).replace(/[^\d\.\-]/g,""));
+      return Number.isFinite(n) ? n : NaN;
+    }
+    function parseFraction(s){
+      const m = String(s).trim().match(/^(-?\d+)\s*\/\s*(-?\d+)$/);
+      if(!m) return null;
+      const num = Number(m[1]), den = Number(m[2]);
+      if(den===0) return null;
+      return { num, den };
+    }
+
+    const PRAISE = [
+      "Nice move—your reasoning is building.",
+      "That adjustment is exactly what mathematicians do.",
+      "Good! Keep the steps clean and you’ll win every time.",
+      "Solid thinking—now we’re cooking.",
+      "Great persistence. One step at a time."
+    ];
+
+    function tutorIntro(){
+      addMsg("tutor",
+        `Welcome! This is a safe place to practice.\nNothing is graded or saved.\n\nPick a domain + skill, then I’ll guide you one step at a time.`,
+        "Teacher-style help • Visual models • Session-only");
+    }
+
+    function newProblem(){
+      state.stepIndex = 0;
+      state.current = makeProblem();
+      updateHeader();
+      addMsg("tutor",
+        `Problem (${state.current.skill.code}):\n${state.current.title}\n\n${state.current.steps[0].prompt}`,
+        `Difficulty: Level ${state.difficulty}${state.challenge ? " • Challenge": ""}`);
+      renderVisual(state.current);
+      renderGuide(state.current.skill);
+    }
+
+    function submitStep(){
+      if(!state.current) return;
+      const input = document.getElementById("studentInput");
+      const raw = input.value.trim();
+      if(!raw){
+        toast("Try a step", "Type your next step (not the final answer).");
+        return;
+      }
+      input.value = "";
+      addMsg("user", raw);
+
+      const stepObj = state.current.steps[state.stepIndex];
+      const res = stepObj.validate(raw.toLowerCase());
+
+      if(res.ok){
+        addMsg("tutor", res.text, randomPraiseMeta());
+        state.stepIndex++;
+
+        // completed?
+        if(state.stepIndex >= state.current.steps.length){
+          celebrate();
+          toast("Nice work!", "New problem generated (session-only).");
+          addMsg("tutor", `🎉 You completed that one.\nWant another of the same skill, or switch skills?`, "No grades • No saving");
+          // auto new problem after a beat
+          setTimeout(()=>{ newProblem(); }, 700);
+          return;
+        }
+
+        // next prompt
+        addMsg("tutor", state.current.steps[state.stepIndex].prompt, "One step at a time");
+      } else {
+        addMsg("tutor", res.text, "Try again—no rush");
+        // provide gentle nudge without giving away
+        if(state.current.skill.code.startsWith("7.EE") && raw.includes("=") && state.stepIndex>0){
+          addMsg("tutor", `Tip: Keep your equation balanced—whatever you do to one side, do to the other.`, "Balance model");
+        }
+      }
+    }
+
+    function giveHint(){
+      if(!state.current) return;
+      const idx = state.stepIndex;
+      const s = state.current.skill;
+      const hint = hintFor(state.current, idx);
+      addMsg("tutor", `Hint: ${hint}`, "You’ve got this");
+      toast("Hint", hint);
+    }
+
+    function showExample(){
+      const s = getSelectedSkill();
+      addMsg("tutor", `Example:\n${s.guide.example}`, `${s.code}`);
+    }
+
+    function hintFor(problem, stepIndex){
+      const code = problem.skill.code;
+      if(code==="7.EE.B.3" && problem.skill.id==="EE3"){
+        if(stepIndex===0) return "Undo the constant first (the +7 or -5 part).";
+        if(stepIndex===1) return "Use the inverse operation on both sides (subtract if it’s +, add if it’s -).";
+        if(stepIndex===2) return "After removing the constant, your equation should look like ax = number.";
+        return "Divide both sides by the coefficient of x.";
+      }
+      if(code==="7.NS.A.1") return "Same signs add; different signs subtract distances and keep the sign of the larger absolute value.";
+      if(code==="7.RP.A.1") return "Unit rate means “per 1.” Divide total by number of units.";
+      if(code==="7.G.B.6") return "Triangle area is half of a rectangle: A = ½bh.";
+      if(code==="7.SP.C.5") return "Probability = favorable ÷ total outcomes.";
+      return problem.skill.guide.key;
+    }
+
+    function randomPraiseMeta(){
+      return PRAISE[Math.floor(Math.random()*PRAISE.length)];
+    }
+
+    /***********************
+     * GUIDE PANEL
+     ***********************/
+    function renderGuide(skill){
+      const g = skill.guide;
+      const body = document.getElementById("guideBody");
+      document.getElementById("standardTag").textContent = skill.code;
+
+      body.innerHTML = `
+        <div class="guideCard">
+          <h3>${skill.title}</h3>
+          <p>${g.key}</p>
+          <div class="tagRow">
+            <span class="tag alt">${skill.code}</span>
+            <span class="tag">Ohio Grade 7</span>
+            <span class="tag warn">No saving</span>
+          </div>
+        </div>
+
+        <div class="guideCard">
+          <h3>How to solve</h3>
+          <ul>
+            ${g.steps.map(x=>`<li>${escapeHTML(x)}</li>`).join("")}
+          </ul>
+        </div>
+
+        <div class="guideCard">
+          <h3>Common mistakes</h3>
+          <ul>
+            ${g.mistakes.map(x=>`<li>${escapeHTML(x)}</li>`).join("")}
+          </ul>
+        </div>
+
+        <div class="guideCard">
+          <h3>Example</h3>
+          <p style="font-family: var(--mono);">${escapeHTML(g.example)}</p>
+          <div class="tagRow">
+            <span class="tag alt">Study it</span>
+            <span class="tag">Then try a problem</span>
+          </div>
+        </div>
+      `;
+    }
+
+    /***********************
+     * UI: domain chips + selects
+     ***********************/
+    function buildDomainChips(){
+      const row = document.getElementById("domainChips");
+      row.innerHTML = "";
+      DOMAINS.forEach(d=>{
+        const chip = document.createElement("button");
+        chip.className = "chip";
+        chip.textContent = `${d.name} • ${d.label}`;
+        chip.onclick = ()=> setDomain(d.id);
+        row.appendChild(chip);
+      });
+      syncChips();
+    }
+
+    function syncChips(){
+      const row = document.getElementById("domainChips");
+      [...row.children].forEach((c,i)=>{
+        const d = DOMAINS[i];
+        c.classList.toggle("active", d.id===state.domain);
+      });
+    }
+
+    function fillSkills(){
+      const sel = document.getElementById("skillSelect");
+      sel.innerHTML = "";
+      SUBSTANDARDS[state.domain].forEach(s=>{
+        const opt = document.createElement("option");
+        opt.value = s.id;
+        opt.textContent = `${s.title} (${s.code})`;
+        sel.appendChild(opt);
+      });
+      state.skill = SUBSTANDARDS[state.domain][0].id;
+    }
+
+    function getSelectedSkill(){
+      const list = SUBSTANDARDS[state.domain];
+      return list.find(x=>x.id===state.skill) || list[0];
+    }
+
+    function setDomain(id){
+      state.domain = id;
+      syncChips();
+      fillSkills();
+      // refresh guide and new problem
+      newChatSection();
+      newProblem();
+    }
+
+    function updateHeader(){
+      const d = DOMAINS.find(x=>x.id===state.domain);
+      const s = getSelectedSkill();
+      document.getElementById("statusLine").textContent =
+        `${d.name} • ${s.title} • ${s.code} • Level ${state.difficulty}${state.challenge ? " (Challenge)" : ""}`;
+    }
+
+    /***********************
+     * Difficulty + Challenge
+     ***********************/
+    function levelUp(){
+      state.difficulty = Math.min(4, state.difficulty+1);
+      document.getElementById("difficultySelect").value = String(state.difficulty);
+      toast("Level up", `Now practicing at Level ${state.difficulty}.`);
+      newProblem();
+    }
+    function levelDown(){
+      state.difficulty = Math.max(1, state.difficulty-1);
+      document.getElementById("difficultySelect").value = String(state.difficulty);
+      toast("Level down", `Now practicing at Level ${state.difficulty}.`);
+      newProblem();
+    }
+    function toggleChallenge(){
+      state.challenge = !state.challenge;
+      document.getElementById("challengeBtn").textContent = `Challenge: ${state.challenge ? "On" : "Off"}`;
+      document.getElementById("challengeBtn").className = `btn ${state.challenge ? "warn" : "ghost"}`;
+      toast("Challenge mode", state.challenge ? "Harder numbers + trickier setups." : "Back to normal difficulty.");
+      newProblem();
+    }
+
+    /***********************
+     * Focus mode
+     ***********************/
+    function toggleFocus(){
+      state.focus = !state.focus;
+      document.getElementById("guidePanel").style.display = state.focus ? "none" : "block";
+      document.getElementById("focusBtn").textContent = state.focus ? "Exit Focus" : "Focus Mode";
+      toast(state.focus ? "Focus mode" : "Study mode", state.focus ? "Guide hidden. Just tutor + model." : "Guide restored.");
+    }
+
+    /***********************
+     * Read Aloud
+     ***********************/
+    function readAloud(){
+      if(!state.current) return;
+      const text = `Problem. ${state.current.title}. ${state.current.steps[state.stepIndex]?.prompt || ""}`;
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 1.0;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+      toast("Read aloud", "Speaking the current prompt.");
+    }
+
+    /***********************
+     * Confetti (animated particles)
+     ***********************/
+    function celebrate(){
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const count = state.challenge ? 220 : 140;
+      const particles = [];
+      for(let i=0;i<count;i++){
+        particles.push({
+          x: canvas.width/2 + (Math.random()*240-120),
+          y: canvas.height*0.25 + (Math.random()*90-45),
+          vx: (Math.random()*10-5),
+          vy: (Math.random()*-10-2),
+          g: 0.25 + Math.random()*0.35,
+          s: 4 + Math.random()*5,
+          r: Math.random()*Math.PI,
+          vr: (Math.random()*0.2-0.1),
+          hue: Math.random()*360
+        });
+      }
+
+      let t=0;
+      function frame(){
+        t++;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        particles.forEach(p=>{
+          p.vy += p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.r += p.vr;
+
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.r);
+          ctx.fillStyle = `hsla(${p.hue}, 100%, 60%, .95)`;
+          ctx.fillRect(-p.s/2, -p.s/2, p.s, p.s);
+          ctx.restore();
+        });
+
+        if(t<55) requestAnimationFrame(frame);
+        else ctx.clearRect(0,0,canvas.width,canvas.height);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    /***********************
+     * Toast
+     ***********************/
+    let toastTimer=null;
+    function toast(title, msg){
+      const el = document.getElementById("toast");
+      document.getElementById("toastTitle").textContent = title;
+      document.getElementById("toastMsg").textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=> el.classList.remove("show"), 2200);
+    }
+
+    /***********************
+     * Admin modal
+     ***********************/
+    function openAdmin(){
+      document.getElementById("modalBackdrop").classList.add("show");
+      document.getElementById("modalBackdrop").setAttribute("aria-hidden","false");
+    }
+    function closeAdmin(){
+      document.getElementById("modalBackdrop").classList.remove("show");
+      document.getElementById("modalBackdrop").setAttribute("aria-hidden","true");
+    }
+
+    /***********************
+     * Chat helpers
+     ***********************/
+    function newChatSection(){
+      const chat = document.getElementById("chat");
+      chat.innerHTML = "";
+      tutorIntro();
+    }
+    function escapeHTML(s){
+      return String(s).replace(/[&<>"']/g, m=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
+
+    /***********************
+     * Hook up selects
+     ***********************/
+    document.getElementById("skillSelect").addEventListener("change", ()=>{
+      state.skill = document.getElementById("skillSelect").value;
+      toast("Skill selected", getSelectedSkill().title);
+      newProblem();
+    });
+    document.getElementById("difficultySelect").addEventListener("change", ()=>{
+      state.difficulty = Number(document.getElementById("difficultySelect").value);
+      toast("Difficulty", `Level ${state.difficulty}`);
+      newProblem();
+    });
+
+    function newProblemBtn(){
+      newProblem();
+    }
+    function newProblem() {
+      state.stepIndex = 0;
+      state.current = makeProblem();
+      updateHeader();
+      const s = state.current.skill;
+      addMsg("tutor",
+        `Problem (${s.code}):\n${state.current.title}\n\n${state.current.steps[0].prompt}`,
+        `Domain: ${DOMAINS.find(x=>x.id===state.domain).name} • Level ${state.difficulty}${state.challenge?" • Challenge":""}`);
+      renderVisual(state.current);
+      renderGuide(s);
+    }
+
+    /***********************
+     * INIT
+     ***********************/
+    function init(){
+      buildDomainChips();
+      fillSkills();
+      document.getElementById("difficultySelect").value = String(state.difficulty);
+      document.getElementById("challengeBtn").textContent = "Challenge: Off";
+      newChatSection();
+      newProblem();
+    }
+    init();
+
+    /***********************
+     * FINAL AI PROMPT (for future API use)
+     ***********************
+     You are a friendly 7th grade Ohio math teacher.
+     - Align practice to Ohio Grade 7 domains: 7.RP, 7.NS, 7.EE, 7.G, 7.SP.
+     - Guide students one step at a time; do NOT allow step skipping.
+     - Don’t give full solutions unless explicitly asked.
+     - Detect misconceptions (wrong inverse operation, sign errors, mixing up units, forgetting 1/2 for triangle area, flipping probability fraction).
+     - Use supportive language; normalize mistakes.
+     - Students control difficulty (level up/down) and can use challenge mode.
+     - No grading and no tracking: do not store identity or performance; treat session as ephemeral.
+     - Use visuals when helpful (number line, tape diagram, balance model, geometry diagrams, simulations).
+     ***********************/
+  </script>
+</body>
+</html>
